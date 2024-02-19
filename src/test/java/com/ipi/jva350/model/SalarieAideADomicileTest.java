@@ -14,8 +14,8 @@ public class SalarieAideADomicileTest {
                 LocalDate.now(),
                 LocalDate.now(),
                 20,
+                11,
                 10,
-                15,
                 3,
                 6
         );
@@ -34,7 +34,7 @@ public class SalarieAideADomicileTest {
                 20,
                 2.5,
                 6,
-                15,
+                9,
                 8
         );
         // When
