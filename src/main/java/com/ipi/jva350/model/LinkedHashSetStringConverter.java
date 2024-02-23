@@ -17,13 +17,13 @@ public class LinkedHashSetStringConverter implements AttributeConverter<LinkedHa
     @Override
     public String convertToDatabaseColumn(LinkedHashSet<LocalDate> localDates) {
         return localDates == null ? null
-            : localDates.stream().map(d -> d.toString()).collect(Collectors.joining(DELIMITER));
+            : localDates.stream().map(LocalDate::toString).collect(Collectors.joining(DELIMITER));
     }
 
     @Override
     public LinkedHashSet<LocalDate> convertToEntityAttribute(String datesString) {
         return datesString == null ? null
-                : new LinkedHashSet(Arrays.stream(datesString.split(DELIMITER))
-                .filter(d -> !d.isEmpty()).map(ds -> LocalDate.parse(ds)).collect(Collectors.toList()));
+                : new LinkedHashSet<>(Arrays.stream(datesString.split(DELIMITER))
+                .filter(d -> !d.isEmpty()).map(LocalDate::parse).collect(Collectors.toList()));
     }
 }

@@ -13,7 +13,7 @@ class SalarieAideADomicileTest {
     void testALegalementDroitADesCongesPayesTrue() {
         // Given
         SalarieAideADomicile monSalarie = new SalarieAideADomicile(
-                "Robertus",
+                "Robert",
                 LocalDate.now(),
                 LocalDate.now(),
                 20,
@@ -25,13 +25,13 @@ class SalarieAideADomicileTest {
         // When
         boolean result = monSalarie.aLegalementDroitADesCongesPayes();
         // Then
-        Assertions.assertEquals(true, result, "Teste ");
+        Assertions.assertTrue(result, "Teste ");
     }
     @Test
     void testALegalementDroitADesCongesPayesFalse() {
         // Given
         SalarieAideADomicile monSalarie = new SalarieAideADomicile(
-                "Robertus",
+                "Robert",
                 LocalDate.now(),
                 LocalDate.now(),
                 20,
@@ -43,7 +43,7 @@ class SalarieAideADomicileTest {
         // When
         boolean result = monSalarie.aLegalementDroitADesCongesPayes();
         // Then
-        Assertions.assertEquals(false, result);
+        Assertions.assertFalse(result);
     }
     @Test
     void testEstHabituellementTravailleTrue() {
@@ -53,7 +53,7 @@ class SalarieAideADomicileTest {
         // When
         boolean result = salarie.estHabituellementTravaille(jour);
         // Then
-        Assertions.assertEquals(true, result);
+        Assertions.assertTrue(result);
     }
     @Test
      void testEstHabituellementTravailleFalse() {
@@ -63,7 +63,7 @@ class SalarieAideADomicileTest {
         // When
         boolean result = salarie.estHabituellementTravaille(jour);
         // Then
-        Assertions.assertEquals(false, result);
+        Assertions.assertFalse(result);
     }
 
     @ParameterizedTest
