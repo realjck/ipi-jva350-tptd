@@ -48,8 +48,11 @@ https://git-scm.com/download/win ). Quelques liens :
 
 - Connectez-vous à https://sonarcloud.io/ en vous identifiant à l'aide de votre compte Github
 - Créez un projet Sonar Cloud pour votre repository forké :
-  - New Project > sélectionnez votre repoisitory forké
-  - Analyse new project > Create a project manually > Créer un token comme indiqué et copiez-le dans un fichier temporaire
+  - My Projects > Analyse new project > Import Another Organization [personal account] > Sélectionnez votre repoisitory forké > Set Up
+  - New code definition : previous version => une première analyse doit se calculer
+- Branchez son analyse par Sonar Cloud dans Github Actions (pour qu'elle soit lancée à chaque build par la CI donc commit) :
+  - toujours dans Sonar Cloud, Administration > Analysis Method > With Github Actions
+  - Create a project manually > Créer un token comme indiqué et copiez-le dans un fichier temporaire
   - Paramétrez l'analyse avec les actions Github comme indiqué
   - ajoutez dans le workflow Github la configuration de l'analyse Sonar Cloud du code
 - Rédigez **ci-dessous** une courte analyse du premier rapport produit par Sonar (métriques, état général...) :
