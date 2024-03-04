@@ -4,10 +4,9 @@ import com.ipi.jva350.exception.SalarieException;
 import com.ipi.jva350.model.Entreprise;
 import com.ipi.jva350.model.SalarieAideADomicile;
 import com.ipi.jva350.repository.SalarieAideADomicileRepository;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityExistsException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
