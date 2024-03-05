@@ -88,6 +88,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-site-plugin -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-site-plugin</artifactId>
+			<version>4.0.0-M13</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -128,7 +135,7 @@
 						<configuration>
 							<rules>
 								<requireMavenVersion>
-									<version>3.5.4</version>
+									<version>3.9.6</version>
 								</requireMavenVersion>
 							</rules>
 						</configuration>
