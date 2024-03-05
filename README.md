@@ -1,5 +1,16 @@
 # TD et TP IPI JVA350 Qualité logicielle
 
+
+>**Notes JCK :**
+>
+>Migration de Spring Boot 2.7.5 à Spring Boot 3.2.3 à nécessité :
+>
+>- Passage de Maven v3.5.4 à v3.9.6
+>
+>- Changement de MySQLConnector/Java à MySQLConnector/J
+>
+>- Changement du package javax en jakarta pour la persistence
+
 ## Pré-requis
 
 - Avoir installé un IDE :
