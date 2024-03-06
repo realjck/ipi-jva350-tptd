@@ -14,17 +14,17 @@ class SalarieAideADomicileTest {
 
 
     /**
-     * Salarié à initialiser avant chaques tests
+     * Salarié à initialiser avant chaque test
      */
     @BeforeEach
     public void setUpSalarie() {
         salarieTest = new SalarieAideADomicile(
-                "toto",
-                LocalDate.of(2023,6,28),
+                "🏹~Robin Dubois~",
+                LocalDate.of(2038,1,20),
                 LocalDate.now(),
-                20,
-                2.5,
-                10,
+                254,
+                30,
+                126,
                 15,
                 8
         );
@@ -34,8 +34,8 @@ class SalarieAideADomicileTest {
     /**
      * Test de la méthode ALégalementDroitADesCongésPayes().
      * D'après la documentation les critères d'admissions sont :
-     *    - Avoir travaillé pendant au moins 10 jours (Pas forcément de suite)
-     *    - Avoir un jour de congé N-1
+     * - Avoir travaillé pendant au moins 10 jours (Pas forcément de suite)
+     * - Avoir un jour de congé N-1
      */
     @Test
     void testALegalementDroitADesCongesPayesTrue() {
@@ -69,7 +69,7 @@ class SalarieAideADomicileTest {
 
 
     /**
-     * Test parametré de calculeJoursDeCongeDecomptesPourPlage()
+     * Test paramétré de calculeJoursDeCongeDecomptesPourPlage()
      * @param dateDebut Début de la plage de test
      * @param dateFin Fin de la plage de test
      * @param expectedResult Résultat attendu pour calculeJoursDeCongeDecomptesPourPlage(dateDebut, dateFin)
@@ -91,7 +91,5 @@ class SalarieAideADomicileTest {
         // Then
         Assertions.assertEquals(expectedResult, result.size());
     }
-
-
 
 }
