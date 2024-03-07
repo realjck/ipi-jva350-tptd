@@ -84,7 +84,7 @@ class SalarieAideADomicileTest {
         // ⇾ Le salarie est initialisé avec le @BeforeEach
 
         // When
-        LinkedHashSet<LocalDate> result = salarieTest.calculeJoursDeCongeDecomptesPourPlage(
+        LinkedHashSet<LocalDate> result = (LinkedHashSet<LocalDate>) salarieTest.calculeJoursDeCongeDecomptesPourPlage(
                 LocalDate.parse(dateDebut),
                 LocalDate.parse(dateFin)
         );
