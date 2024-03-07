@@ -76,10 +76,10 @@ public final class Entreprise {
             if (tmp.charAt(2) == '0' && tmp.charAt(3) == '0') {
                 return false;
             }
-            if (tmp.charAt(3)=='0'||tmp.charAt(3)=='4'||tmp.charAt(3)=='8')return true;
+            return tmp.charAt(3) == '0' || tmp.charAt(3) == '4' || tmp.charAt(3) == '8';
         }
-        return false;
     }
+
 
     public static double proportionPondereeDuMois(LocalDate moisDuConge) {
         int proportionPonderee = 8;
@@ -121,16 +121,33 @@ public final class Entreprise {
     }
 
 
+    /**
+     * return d == null ? null
+     *                 : d.getMonthValue() > 5 ? LocalDate.of(d.getMonthValue(), 6, 1)
+     *                 : LocalDate.of(d.getYear() - 1, 6, 1)
+     * @param d
+     * @return
+     */
+
+    /**
+     * Retourne le premier jour d'une année de congés en fonction d'une date
+     * (du 1er juin au 31 mai)
+     * @param d LocalDate: La date d
+     * @return LocalDate : Le premier jour de congé payé de l'année de la date d
+     */
     public static LocalDate getPremierJourAnneeDeConges(LocalDate d) {
         if (d == null) {
             return null;
-        } else {
-            if (d.getMonthValue() > 5) {
-                return LocalDate.of(d.getMonthValue(), 6, 1);
-            }
+        }
+
+        if (d.getMonthValue() > 5) {
+            return LocalDate.of(d.getYear(), 6, 1);
+        }
+        else {
             return LocalDate.of(d.getYear() - 1, 6, 1);
         }
     }
+
 
     public static boolean estJourFerie(LocalDate jour) {
         int monEntier = (int) Entreprise.joursFeries(jour).stream().filter(d ->
@@ -144,15 +161,28 @@ public final class Entreprise {
 
     /**
      * Calcule si une date donnée est dans une plage (intervalle) de date (inclusif)
-     * @param d date d'entrée à comparer
+     * @param d date à tester
      * @param debut date de début de la plage
      * @param fin date de fin de la plage
      * @return
      */
     public static boolean estDansPlage(LocalDate d, LocalDate debut, LocalDate fin) {
-        return (d.isAfter(debut) && d.isBefore(fin))
-                || d.equals(debut)
-                || d.equals(fin);
+        // à implémenter en TDD !
+
+        /*
+        En écrivant la méthode après avoir mis au point les test, je pense que je n'aurais pas géré les erreurs de date de cette manière.
+        Je pense que j'aurais juste mis mon return sans forcément mettre de message d'erreur pour les cas en erreur, où alors un de manière plus générique,
+        en implémentant juste un message pour le cas false, mais le code aurait perdu en précision et donc en beauté
+         */
+
+        if (debut.isEqual(fin)) { // Je ne suis pas sûr que ce scenario soit à tester, mais ça me semblait pertinent dans l'exercice
+            throw new IllegalArgumentException("Date de début égale à la date de fin");
+        } else if (debut.isAfter(fin)) {
+            throw new IllegalArgumentException("Date de début supérieur à la date de fin");
+        } else {
+            return !d.isBefore(debut) && !d.isAfter(fin);
+        }
+
     }
 
 }

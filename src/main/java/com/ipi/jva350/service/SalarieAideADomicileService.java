@@ -4,23 +4,23 @@ import com.ipi.jva350.exception.SalarieException;
 import com.ipi.jva350.model.Entreprise;
 import com.ipi.jva350.model.SalarieAideADomicile;
 import com.ipi.jva350.repository.SalarieAideADomicileRepository;
-import jakarta.persistence.EntityExistsException;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityExistsException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class SalarieAideADomicileService {
 
-    @Autowired
-    private SalarieAideADomicileRepository salarieAideADomicileRepository;
+    private final SalarieAideADomicileRepository salarieAideADomicileRepository;
 
-    public SalarieAideADomicileService() {
-        // Ce constructeur est vide, car il n'y a pas d'attribut à initialiser.
+    public SalarieAideADomicileService(SalarieAideADomicileRepository salarieAideADomicileRepository) {
+        this.salarieAideADomicileRepository = salarieAideADomicileRepository;
     }
 
     /**
@@ -95,9 +95,9 @@ public class SalarieAideADomicileService {
     /**
      * Calcule les jours de congés à décompter, et si valide (voir plus bas) les décompte au salarié
      * et le sauve en base de données
-     * @param salarieAideADomicile TODO nom ?
-     * @param jourDebut
-     * @param jourFin peut être dans l'année suivante mais uniquement son premier jour
+     * @param salarieAideADomicile Objet SalarieAideADomicile du salarie à modifier
+     * @param jourDebut ne peux être avant à la date actuelle
+     * @param jourFin peut-être dans l'année suivante, mais uniquement son premier jour
      * @throws SalarieException si pas de jour décompté, ou avant le mois en cours, ou dans l'année suivante
      * (hors l'exception du premier jour pour résoudre le cas d'un samedi), ou la nouvelle totalité
      * des jours de congé pris décomptés dépasse le nombre acquis en N-1 ou la limite de l'entreprise
@@ -116,9 +116,15 @@ public class SalarieAideADomicileService {
         }
 
         // on vérifie que le congé demandé est dans les mois restants de l'année de congés en cours du salarié :
-        if (joursDecomptes.stream().findFirst().get()
-                .isBefore(salarieAideADomicile.getMoisEnCours())) {
-            throw new SalarieException("Pas possible de prendre de congé avant le mois en cours !");
+
+        Optional<LocalDate> premierJourOptional = joursDecomptes.stream().findFirst();
+        if (premierJourOptional.isPresent()) {
+            LocalDate premierJour = premierJourOptional.get();
+            if (salarieAideADomicile.getMoisEnCours().isBefore(premierJour)) {
+                throw new SalarieException("Pas possible de prendre de congé avant le mois en cours !");
+            }
+        } else {
+            throw new SalarieException("Aucun premier jour de congé trouvé !");
         }
         LinkedHashSet<LocalDate> congesPayesPrisDecomptesAnneeN = new LinkedHashSet<>(joursDecomptes.stream()
                 .filter(d -> !d.isAfter(LocalDate.of(Entreprise.getPremierJourAnneeDeConges(
@@ -163,12 +169,12 @@ public class SalarieAideADomicileService {
      * @param salarieAideADomicile salarié
      * @param joursTravailles jours travaillés dans le mois en cours du salarié
      */
-    public void clotureMois(SalarieAideADomicile salarieAideADomicile, double joursTravailles) throws SalarieException {
+    public void clotureMois(SalarieAideADomicile salarieAideADomicile, double joursTravailles) {
         // incrémente les jours travaillés de l'année N du salarié de celles passées en paramètres
         salarieAideADomicile.setJoursTravaillesAnneeN(salarieAideADomicile.getJoursTravaillesAnneeN() + joursTravailles);
 
         salarieAideADomicile.setCongesPayesAcquisAnneeN(salarieAideADomicile.getCongesPayesAcquisAnneeN()
-                + salarieAideADomicile.CONGES_PAYES_ACQUIS_PAR_MOIS);
+                + SalarieAideADomicile.CONGES_PAYES_ACQUIS_PAR_MOIS);
 
         salarieAideADomicile.setMoisEnCours(salarieAideADomicile.getMoisEnCours().plusMonths(1));
 
@@ -182,7 +188,7 @@ public class SalarieAideADomicileService {
     /**
      * Clôture l'année donnée. Il s'agit d'une année DE CONGES donc du 1er juin au 31 mai.
      * Passe les variables N à N-1
-     * @param salarieAideADomicile Salarié
+     * @param salarieAideADomicile
      */
     void clotureAnnee(SalarieAideADomicile salarieAideADomicile) {
         salarieAideADomicile.setJoursTravaillesAnneeNMoins1(salarieAideADomicile.getJoursTravaillesAnneeN());
