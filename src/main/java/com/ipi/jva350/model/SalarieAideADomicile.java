@@ -1,18 +1,18 @@
 package com.ipi.jva350.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class SalarieAideADomicile {
 
-    public static float CONGES_PAYES_ACQUIS_PAR_MOIS = 2.5f;
-
+    public static final float CONGES_PAYES_ACQUIS_PAR_MOIS = 2.5f;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +20,7 @@ public class SalarieAideADomicile {
 
     private String nom;
 
-    public static List<DayOfWeek> joursHabituellementTravailles = new ArrayList<DayOfWeek>();
+    protected static final List<DayOfWeek> joursHabituellementTravailles = new ArrayList<>();
 
     static {
         joursHabituellementTravailles.add(DayOfWeek.MONDAY);
@@ -39,7 +39,7 @@ public class SalarieAideADomicile {
     /** en année N sur l'acquis N-1 */
     @Convert(converter = LinkedHashSetStringConverter.class)
     @Column
-    private LinkedHashSet<LocalDate> congesPayesPris = new LinkedHashSet<LocalDate>();
+    private LinkedHashSet<LocalDate> congesPayesPris = new LinkedHashSet<>();
     private double joursTravaillesAnneeNMoins1= 0;
     private double congesPayesAcquisAnneeNMoins1= 0;
     private double congesPayesPrisAnneeNMoins1= 0;
@@ -47,6 +47,17 @@ public class SalarieAideADomicile {
     public SalarieAideADomicile() {
     }
 
+    /**
+     *
+     * @param nom nom du salarié
+     * @param moisDebutContrat mois de début de contrat
+     * @param moisEnCours mois en cours
+     * @param joursTravaillesAnneeN jours travaillés année N
+     * @param congesPayesAcquisAnneeN congés payés acquis année N
+     * @param joursTravaillesAnneeNMoins1 jours travaillés année N-1
+     * @param congesPayesAcquisAnneeNMoins1 congés payés acquis année N-1
+     * @param congesPayesPrisAnneeNMoins1 congés payés pris année N-1
+     */
     public SalarieAideADomicile(String nom, LocalDate moisDebutContrat, LocalDate moisEnCours,
                                 //LinkedHashSet<LocalDate> congesPayesPris,
                                 double joursTravaillesAnneeN, double congesPayesAcquisAnneeN,
@@ -59,28 +70,27 @@ public class SalarieAideADomicile {
         this.congesPayesPrisAnneeNMoins1 = congesPayesPrisAnneeNMoins1;
         this.joursTravaillesAnneeN = joursTravaillesAnneeN;
         this.congesPayesAcquisAnneeN = congesPayesAcquisAnneeN;
-        //this.congesPayesPris = congesPayesPris;
     }
 
     /**
-     * D'après https://femme-de-menage.ooreka.fr/comprendre/conges-payes-femme-de-menage :
+     * D'après <a href="https://femme-de-menage.ooreka.fr/comprendre/conges-payes-femme-de-menage">...</a> :
      * Pour s'ouvrir des droits à congés payés – capitalisation de jours + prise et/ou paiement – l'aide ménagère doit avoir travaillé pour le particulier employeur :
      *     pendant au moins dix jours (pas forcément de suite) ;
      *     à l'intérieur d'une période de temps – dite de « référence » – allant du 1er juin de l'année N au 31 mai de l'année N - 1.
      * NB. on considère que la précédente ligne est correcte d'un point de vue des spécifications métier
      * bien que l'originale dans le lien dit "N+1" au lieu de "N-1"
-     * @return
+     * @return booléen
      */
     public boolean aLegalementDroitADesCongesPayes() {
         return this.getJoursTravaillesAnneeNMoins1() >= 10;
     }
 
     /**
-     * @param dateDebut
-     * @param dateFin
+     * @param dateDebut début de plage
+     * @param dateFin fin de plage
      * @return les jours de congé décomptés, ordonnés. Leur premier et dernier peuvent être après eux fournis.
      */
-    public LinkedHashSet<LocalDate> calculeJoursDeCongeDecomptesPourPlage(LocalDate dateDebut, LocalDate dateFin) {
+    public Set<LocalDate> calculeJoursDeCongeDecomptesPourPlage(LocalDate dateDebut, LocalDate dateFin) {
         LinkedHashSet<LocalDate> joursDeCongeDecomptes = new LinkedHashSet<>();
 
         if (dateDebut.isAfter(dateFin)) {
@@ -157,12 +167,12 @@ public class SalarieAideADomicile {
         this.congesPayesAcquisAnneeN = congesPayesAcquisAnneeN;
     }
 
-    public LinkedHashSet<LocalDate> getCongesPayesPris() {
+    public Set<LocalDate> getCongesPayesPris() {
         return congesPayesPris;
     }
 
-    public void setCongesPayesPris(LinkedHashSet<LocalDate> congesPayesPris) {
-        this.congesPayesPris = congesPayesPris;
+    public void setCongesPayesPris(Set<LocalDate> congesPayesPris) {
+        this.congesPayesPris = (LinkedHashSet<LocalDate>) congesPayesPris;
     }
 
     public double getJoursTravaillesAnneeNMoins1() {
@@ -176,15 +186,6 @@ public class SalarieAideADomicile {
     public double getCongesPayesRestantAnneeNMoins1() {
         return this.congesPayesAcquisAnneeNMoins1 - this.getCongesPayesPrisAnneeNMoins1();
     }
-    /*
-    public double getCongesPayesRestantAnneeNMoins1() {
-        return congesPayesRestantAnneeNMoins1;
-    }
-
-    public void setCongesPayesRestantAnneeNMoins1(double congesPayesRestantAnneeNMoins1) {
-        this.congesPayesRestantAnneeNMoins1 = congesPayesRestantAnneeNMoins1;
-    }
-    */
 
     public double getCongesPayesAcquisAnneeNMoins1() {
         return congesPayesAcquisAnneeNMoins1;
@@ -217,13 +218,11 @@ public class SalarieAideADomicile {
     public void setMoisDebutContrat(LocalDate moisDebutContrat) {
         this.moisDebutContrat = moisDebutContrat;
     }
-    
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SalarieAideADomicile)) return false;
-        SalarieAideADomicile s = (SalarieAideADomicile) o;
+        if (!(o instanceof SalarieAideADomicile s)) return false;
         return Objects.equals(id, s.id) &&
                 Objects.equals(nom, s.nom);
     }

@@ -71,20 +71,28 @@ public final class Entreprise {
     public static boolean bissextile(int y) {
         String tmp = String.valueOf(y);
         if (tmp.charAt(2) == '1' || tmp.charAt(2) == '3' || tmp.charAt(2) == 5 || tmp.charAt(2) == '7' || tmp.charAt(2) == '9') {
-            if (tmp.charAt(3)=='2'||tmp.charAt(3)=='6') return true;
-            else
-                return false;
+            return tmp.charAt(3) == '2' || tmp.charAt(3) == '6';
         }else{
             if (tmp.charAt(2) == '0' && tmp.charAt(3) == '0') {
                 return false;
             }
-            if (tmp.charAt(3)=='0'||tmp.charAt(3)=='4'||tmp.charAt(3)=='8')return true;
+            return tmp.charAt(3) == '0' || tmp.charAt(3) == '4' || tmp.charAt(3) == '8';
         }
-        return false;
     }
 
+
+    /**
+     * Retourne une proportion (> 0 et < 1) en fonction du mois de congé
+     * -----------------------------------------------------------------
+     * Note : Nous avons détecté une proportion pouvant être égale à 1 dans le précédent build
+     * perdant son caractère proportionnel.
+     * L'échelle globale a donc été revue pour partir de 7 au lieu de 8,
+     * ce qui réalise une proportion égale à 0.99 sur le mois de mai.
+     * @param moisDuConge LocalDate : Mois du congé
+     * @return double
+     */
     public static double proportionPondereeDuMois(LocalDate moisDuConge) {
-        int proportionPonderee = 8;
+        int proportionPonderee = 7;
         int mois = 1 + (moisDuConge.getMonthValue() + 6) % 12;
         if (mois >= 2) {
             proportionPonderee += 20;
@@ -122,18 +130,31 @@ public final class Entreprise {
         return proportionPonderee / 12d / 10d;
     }
 
-
+    /**
+     * Retourne le premier jour d'une année de congés en fonction d'une date
+     * (du 1er juin au 31 mai)
+     * @param d LocalDate: La date d
+     * @return LocalDate : Le premier jour de congé payé de l'année de la date d
+     */
     public static LocalDate getPremierJourAnneeDeConges(LocalDate d) {
-        return d == null ? null
-                : d.getMonthValue() > 5 ? LocalDate.of(d.getMonthValue(), 6, 1)
-                : LocalDate.of(d.getYear() - 1, 6, 1);
+        if (d == null) {
+            return null;
+        }
+
+        if (d.getMonthValue() > 5) {
+            return LocalDate.of(d.getYear(), 6, 1);
+        }
+        else {
+            return LocalDate.of(d.getYear() - 1, 6, 1);
+        }
     }
+
 
     public static boolean estJourFerie(LocalDate jour) {
         int monEntier = (int) Entreprise.joursFeries(jour).stream().filter(d ->
                 d.equals(jour)).count();
         int test = bissextile(jour.getYear()) ? 1 : 0;
-        if (test != 0 && !(monEntier > 1)) {
+        if (test != 0 && monEntier <= 1) {
             test--;
         }
         return monEntier != test;
@@ -141,14 +162,15 @@ public final class Entreprise {
 
     /**
      * Calcule si une date donnée est dans une plage (intervalle) de date (inclusif)
-     * @param d
+     * @param d date à tester
      * @param debut date de début de la plage
      * @param fin date de fin de la plage
-     * @return
+     * @return boolean
      */
     public static boolean estDansPlage(LocalDate d, LocalDate debut, LocalDate fin) {
-        // à implémenter en TDD !
-        throw new RuntimeException("à implémenter en TDD !");
+        return (d.isAfter(debut) && d.isBefore(fin))
+                || d.equals(debut)
+                || d.equals(fin);
     }
 
 }
