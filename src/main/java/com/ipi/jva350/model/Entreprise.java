@@ -81,8 +81,18 @@ public final class Entreprise {
     }
 
 
+    /**
+     * Retourne une proportion (> 0 et < 1) en fonction du mois de congé
+     * -----------------------------------------------------------------
+     * Note : Nous avons détecté une proportion pouvant être égale à 1 dans le précédent build
+     * perdant son caractère proportionnel.
+     * L'échelle globale a donc été revue pour partir de 7 au lieu de 8,
+     * ce qui réalise une proportion égale à 0.99 sur le mois de mai.
+     * @param moisDuConge LocalDate : Mois du congé
+     * @return double
+     */
     public static double proportionPondereeDuMois(LocalDate moisDuConge) {
-        int proportionPonderee = 8;
+        int proportionPonderee = 7;
         int mois = 1 + (moisDuConge.getMonthValue() + 6) % 12;
         if (mois >= 2) {
             proportionPonderee += 20;
@@ -120,15 +130,6 @@ public final class Entreprise {
         return proportionPonderee / 12d / 10d;
     }
 
-
-    /**
-     * return d == null ? null
-     *                 : d.getMonthValue() > 5 ? LocalDate.of(d.getMonthValue(), 6, 1)
-     *                 : LocalDate.of(d.getYear() - 1, 6, 1)
-     * @param d
-     * @return
-     */
-
     /**
      * Retourne le premier jour d'une année de congés en fonction d'une date
      * (du 1er juin au 31 mai)
@@ -164,25 +165,12 @@ public final class Entreprise {
      * @param d date à tester
      * @param debut date de début de la plage
      * @param fin date de fin de la plage
-     * @return
+     * @return boolean
      */
     public static boolean estDansPlage(LocalDate d, LocalDate debut, LocalDate fin) {
-        // à implémenter en TDD !
-
-        /*
-        En écrivant la méthode après avoir mis au point les test, je pense que je n'aurais pas géré les erreurs de date de cette manière.
-        Je pense que j'aurais juste mis mon return sans forcément mettre de message d'erreur pour les cas en erreur, où alors un de manière plus générique,
-        en implémentant juste un message pour le cas false, mais le code aurait perdu en précision et donc en beauté
-         */
-
-        if (debut.isEqual(fin)) { // Je ne suis pas sûr que ce scenario soit à tester, mais ça me semblait pertinent dans l'exercice
-            throw new IllegalArgumentException("Date de début égale à la date de fin");
-        } else if (debut.isAfter(fin)) {
-            throw new IllegalArgumentException("Date de début supérieur à la date de fin");
-        } else {
-            return !d.isBefore(debut) && !d.isAfter(fin);
-        }
-
+        return (d.isAfter(debut) && d.isBefore(fin))
+                || d.equals(debut)
+                || d.equals(fin);
     }
 
 }
