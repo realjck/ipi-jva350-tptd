@@ -12,27 +12,18 @@ import static com.ipi.jva350.model.Entreprise.*;
 
 class EntrepriseTest {
 
-    LocalDate plageDebut;
-    LocalDate plageFin;
-    LocalDate dateAnterieure;
-    LocalDate dateUlterieure;
-    LocalDate dateIncluse;
-
-    @BeforeEach
-    public void setUpDate() {
-        // Ce test de plage se réfère à des vérifications en dehors du temps POSIX
-        plageDebut = LocalDate.of(1970, 1, 1);
-        plageFin = LocalDate.of(2040, 2, 29);
-        dateAnterieure = LocalDate.of(1969, 12, 31);
-        dateUlterieure = LocalDate.of(2040,3,1);
-        dateIncluse = LocalDate.of(2000,1,1);
-    }
-
-    /**
-     * Vérifie si les dates définies sont incluses ou non dans la plage ci-dessus :
-     */
+    //********************************************** //
+    //******* Test de la méthode estDansPlage ****** //
+    //********************************************** //
     @Test
     void testEstDansPlage() {
+
+        // Ce test de plage se réfère à des vérifications en dehors du temps POSIX
+        LocalDate plageDebut = LocalDate.of(1970, 1, 1);
+        LocalDate plageFin = LocalDate.of(2040, 2, 29);
+        LocalDate dateAnterieure = LocalDate.of(1969, 12, 31);
+        LocalDate dateUlterieure = LocalDate.of(2040,3,1);
+        LocalDate dateIncluse = LocalDate.of(2000,1,1);
 
         Assertions.assertFalse(estDansPlage(dateAnterieure, plageDebut, plageFin),
                 "Échec test date antérieure 31/12/1969");
@@ -92,7 +83,7 @@ class EntrepriseTest {
 
 
     //************************************************************* //
-    //******* Test de la méthode getPremierJourAnneeDeConges *******//
+    //******* Test de la méthode getPremierJourAnneeDeConges ****** //
     //************************************************************* //
     // (Alvin Kita)
 
@@ -135,8 +126,35 @@ class EntrepriseTest {
     @Test
     void testGetPremierJourAnneeDeCongesNull() {
         // Utilisation de la syntaxe fluent (Given, When, Then sur une seule ligne)
-        // afin de ne pas causer d'alerte IDE :
+        // afin de ne pas causer d'alerte du linter IDE :
         Assertions.assertNull(getPremierJourAnneeDeConges(null));
+    }
+
+    //********************************************************** //
+    //******* Test de la méthode proportionPondereeDuMois ****** //
+    //********************************************************** //
+    @ParameterizedTest(name = "Test de la méthode proportionPondereeDuMois {0}")
+    @CsvSource({
+            "'2023-01-01'",
+            "'2023-02-01'",
+            "'2023-03-01'",
+            "'2023-04-01'",
+            "'2023-05-01'",
+            "'2023-06-01'",
+            "'2023-07-01'",
+            "'2023-08-01'",
+            "'2023-09-01'",
+            "'2023-10-01'",
+            "'2023-11-01'",
+            "'2023-12-01'"
+    })
+    void testProportionPondereeDuMois(String mois) {
+
+        double proportion = proportionPondereeDuMois(LocalDate.parse(mois));
+
+        // Nous partons du principe que la proportion doit être strictement entre 0 et 1
+        // Une proportion égale à 1 n'étant plus proportionnelle par rapport à aucune autre valeur
+        Assertions.assertTrue(proportion > 0 && proportion < 1);
     }
 
 }
