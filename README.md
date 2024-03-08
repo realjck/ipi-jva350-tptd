@@ -1,15 +1,36 @@
 # TD et TP IPI JVA350 Qualité logicielle
 
 
->**Notes JCK :**
->
->Migration de Spring Boot 2.7.5 à Spring Boot 3.2.3 à nécessité :
->
->- Passage de Maven v3.5.4 à v3.9.6
->
->- Changement de MySQLConnector/Java à MySQLConnector/J
->
->- Changement du package javax en jakarta pour la persistence
+## Rendu évaluation jva320 Qualité logicielle
+Alvin Kita & JC Kleinbourg
+
+Nous avons apporté des améliorations au code via le plugin Intellij de Sonar, également effectué les tests unitaires et d'intégrations nécessaires. Nous avons ensuite apporté les corrections et améliorations du code, notamment en utilisant l'approche TDD pour l'écriture des méthodes.
+
+Ces tests sont connectés au Github Actions via le fichier `.github/workflows/maven.yml`. Il s'y trouve également l'initialisation des tests Cucumber (cf. capture d'écrans jointes en e-mail).
+
+Les détails de chaque point indiqué sont en commentaire des parties de code correspondantes :
+
+### Update et mise à jour
+- Mise à Jour vers Java 17 et Spring Boot 3.2.3 (cause CVE)
+- Mise à jour vers Maven 3.9.6
+
+### TDD, tests unitaires
+- Intègre tests de la méthode salarié
+- Intègre tests paramétrés classe Entreprise
+- Test de la méthode de Proportion pondérée
+- Implementation et développement des méthodes testées
+- Intègre mock pour Ajout des jours de congés
+
+### Correctifs
+- Corrige 2 bugs dans l'évaluation des exceptions
+- Corrige 1 bug pour la vérification du droit aux congés payés
+- Corrige 1 logique métier pour le respect de la proportionnalité
+
+### CI/CD
+- Intègre les tests Maven avec Github Actions
+- Lint, nettoie et réusine code avec Sonar
+
+---
 
 ## Pré-requis
 
