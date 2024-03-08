@@ -11,7 +11,7 @@ Ces tests sont connectés au Github Actions via le fichier `.github/workflows/ma
 Les détails de chaque point indiqué sont en commentaire des parties de code correspondantes :
 
 ### Update et mise à jour
-- Mise à Jour vers Java 17 et Spring Boot 3.2.3 (cause CVE-2021-26291)
+- Mise à Jour vers Java 17 et Spring Boot 3.2.3 (cause [CVE-2021-26291](https://github.com/advisories/GHSA-2f88-5hg8-9x2x))
 - Mise à jour vers Maven 3.9.6
 
 ### TDD, tests unitaires
