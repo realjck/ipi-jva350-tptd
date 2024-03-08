@@ -31,3 +31,8 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Tests avec Junit
       run: mvn test
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: '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'
+        SONAR_TOKEN: '3a2d457d76b1835822592888884f028102bd65a0'
