@@ -1,7 +1,7 @@
 # TD et TP IPI JVA350 Qualité logicielle
 
 
-## Rendu évaluation jva320 Qualité logicielle
+## Rendu évaluation
 Alvin Kita & JC Kleinbourg
 
 Nous avons apporté des améliorations au code via le plugin Intellij de Sonar, également effectué les tests unitaires et d'intégrations nécessaires. Nous avons ensuite apporté les corrections et améliorations du code, notamment en utilisant l'approche TDD pour l'écriture des méthodes.
